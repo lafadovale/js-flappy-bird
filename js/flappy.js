@@ -15,11 +15,6 @@ function Pipe(reversed = false) {
     this.setOpeningHeight = totalHeight => body.style.height = `${totalHeight}px`;
 };
 
-// Test lines #1
-// const b = new Pipe(true)
-// b.setOpeningHeight(300)
-// document.querySelector('[flappy]').appendChild(b.element)
-
 function PipePair(totalHeight, openingGap, x) {
     this.element = newElement('div', 'pipe-pair');
 
@@ -44,10 +39,6 @@ function PipePair(totalHeight, openingGap, x) {
     this.setX(x);
 };
 
-// Test lines #2
-// const b = new PipePair(700, 250, 400);
-// document.querySelector('[flappy]').appendChild(b.element);
-
 function WallsSequence(totalHeight, totalWidth, openingGap, wallGap, upScore) {
     this.pairs = [
         new PipePair(totalHeight, openingGap, totalWidth),
@@ -61,12 +52,13 @@ function WallsSequence(totalHeight, totalWidth, openingGap, wallGap, upScore) {
         this.pairs.forEach(pair => {
             pair.setX(pair.getX() - displacement);
 
-            // When the element leaves the game zone
+            // When the element leaves the game zone, it gets drawed before being put back to the end of the line.
             if (pair.getX() < -pair.getWidth()) {
                 pair.setX(pair.getX() + wallGap * this.pairs.length);
                 pair.drawOpeningHeight();
             };
 
+            // with birdWidth and pipeWidth, the score is raised only when the bird completely crosses the pipe wall.
             const middlePoint = totalWidth / 2;
             const birdWidth = 60;
             const pipeWidth = 130;
@@ -104,17 +96,6 @@ function Bird(totalHeight) {
     this.setY(totalHeight / 2);
 };
 
-// Test lines #3
-// const wallsSequence = new WallsSequence(700, 1200, 200, 400);
-// const bird = new Bird(700);
-// const gameZone = document.querySelector('[flappy]');
-// gameZone.appendChild(bird.element);
-// wallsSequence.pairs.forEach(pair => gameZone.appendChild(pair.element));
-// setInterval(() => {
-//     wallsSequence.animate();
-//     bird.animate();
-// }, 20);
-
 function Score() {
     this.element = newElement('span', 'score');
     this.updateScore = points => {
@@ -123,18 +104,7 @@ function Score() {
     this.updateScore(0);
 };
 
-// Test lines #4
-// const wallsSequence = new WallsSequence(700, 1200, 200, 400);
-// const bird = new Bird(700);
-// const gameZone = document.querySelector('[flappy]');
-// gameZone.appendChild(bird.element);
-// gameZone.appendChild(new Score().element);
-// wallsSequence.pairs.forEach(pair => gameZone.appendChild(pair.element));
-// setInterval(() => {
-//     wallsSequence.animate();
-//     bird.animate();
-// }, 20);
-
+// Collision treatment
 function elementsOverlapping(elementA, elementB) {
     const a = elementA.getBoundingClientRect();
     const b = elementB.getBoundingClientRect();
